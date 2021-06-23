@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { CreateDateColumn } from "typeorm";
 import { CreateUserController } from "./controllers/CreateUserController";
 
 const router = Router()
