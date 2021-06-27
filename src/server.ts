@@ -12,8 +12,7 @@ app.use(express.json())
 app.use(router)
 
 app.use((err: ErroHandler, request: Request, response: Response, next: NextFunction) => {
-  
-  
+    
   if(err instanceof ErroHandler) {
     return response.status(err.errorStatus).json({
       error: err.errorMessage
