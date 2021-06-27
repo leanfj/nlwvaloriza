@@ -1,5 +1,6 @@
 import { getCustomRepository } from "typeorm"
 import { TagsRepositories } from "../repositories/TagsRepositories"
+import { ErroHandler } from "../util/ErrorHandler"
 
 class CreateTagService {
   async execute(name: string) {
@@ -7,14 +8,14 @@ class CreateTagService {
 
     if (!name) {
       //Pesquisar biblioteca de validação de campo!!!!
-      throw new Error("Nome incorreto!")
+      throw new ErroHandler({errorStatus: 400,errorMessage: "Nome incorreto!"})
 
     }
 
     const tagAlreadyExists = await tagsRepositories.findOne({name})
     
     if (tagAlreadyExists) {
-      throw new Error("Tag já está cadastrada!!!")
+      throw new ErroHandler({errorStatus: 400,errorMessage:"Tag já está cadastrada!!!"})
     }
 
     const tag = tagsRepositories.create({name})
