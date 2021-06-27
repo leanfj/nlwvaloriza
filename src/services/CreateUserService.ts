@@ -1,6 +1,7 @@
 import { getCustomRepository } from "typeorm"
 
 import { UsersRepositories } from "../repositories/UsersRepositories"
+import { ErroHandler } from "../util/errorHandler"
 
 interface IUserRequest {
   name: string
@@ -12,8 +13,8 @@ class CreateUserServices {
   async execute({name, email, admin}: IUserRequest) {
     const userRepository = getCustomRepository(UsersRepositories)
 
-    if(!email) {
-      throw new Error("Email incorreto")
+    if(!email) {      
+      throw new ErroHandler({errorStatus: 400, errorMessage: "Email inválido"}) 
     }
 
     const userAlreadyExits = await userRepository.findOne({
@@ -21,7 +22,7 @@ class CreateUserServices {
     })
 
     if(userAlreadyExits) {
-      throw new Error("Usuário já cadastrado")
+      throw new ErroHandler({errorStatus: 409, errorMessage: "Usuário já esta cadastrado"})
     }
 
     const user = userRepository.create({
