@@ -1,16 +1,19 @@
 import { getCustomRepository } from "typeorm"
+import {hash} from "bcryptjs"
 
 import { UsersRepositories } from "../repositories/UsersRepositories"
-import { ErroHandler } from "../util/errorHandler"
+
+import {ErroHandler} from "../util/ErrorHandler"
 
 interface IUserRequest {
   name: string
   email: string
+  password: string
   admin?: boolean
 }
 
 class CreateUserServices {
-  async execute({name, email, admin}: IUserRequest) {
+  async execute({name, email, password, admin}: IUserRequest) {
     const userRepository = getCustomRepository(UsersRepositories)
 
     if(!email) {      
@@ -25,9 +28,12 @@ class CreateUserServices {
       throw new ErroHandler({errorStatus: 409, errorMessage: "Usuário já esta cadastrado"})
     }
 
+    const passwordHash = await hash(password, 8)
+    
     const user = userRepository.create({
       name,
       email,
+      password: passwordHash,
       admin
     })
 

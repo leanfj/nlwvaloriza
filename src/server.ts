@@ -5,8 +5,7 @@ import "express-async-errors"
 import { router } from "./routes"
 
 import "./database"
-import { ErroHandler } from "./util/errorHandler"
-import { CreateUserServices } from "./services/CreateUserService"
+import { ErroHandler } from "./util/ErrorHandler"
 
 const app = express()
 app.use(express.json())
